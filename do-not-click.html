@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DO NOT CLICK</title>
+<style>
+  :root {
+    --bg1: #0f0c29;
+    --bg2: #302b63;
+    --bg3: #24243e;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+    font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+    background: linear-gradient(-45deg, var(--bg1), var(--bg2), var(--bg3), #1a1a2e);
+    background-size: 400% 400%;
+    animation: bgShift 18s ease infinite;
+    color: #fff;
+    transition: transform 0.6s ease, filter 0.6s ease;
+  }
+
+  @keyframes bgShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  body.rotated { transform: rotate(180deg); }
+  body.tilted { transform: rotate(8deg) scale(0.95); }
+  body.tilted-neg { transform: rotate(-8deg) scale(0.95); }
+  body.shrunk { transform: scale(0.6); }
+  body.grown { transform: scale(1.15); }
+  body.upside-shake { animation: bgShift 18s ease infinite, shake 0.4s ease; }
+  body.inverted { filter: invert(1) hue-rotate(180deg); }
+  body.grayscale { filter: grayscale(1) contrast(1.3); }
+  body.blurred { filter: blur(3px); }
+  body.rainbow-filter { filter: saturate(3) hue-rotate(90deg); }
+
+  body.rtl-flip { transform: scaleX(-1); }
+  body.upside-down-text { transform: rotate(180deg) scaleX(-1); }
+  body.comic-sans-mode { font-family: 'Comic Sans MS', cursive !important; }
+  body.strobe { animation: bgShift 18s ease infinite, strobeFlicker 0.15s steps(1) infinite; }
+  body.glitch-mode { animation: bgShift 18s ease infinite, glitchJump 0.25s steps(2) infinite; filter: hue-rotate(180deg) contrast(1.4); }
+
+  @keyframes strobeFlicker {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(2.2) contrast(1.5); }
+  }
+
+  @keyframes glitchJump {
+    0% { transform: translate(0,0); }
+    20% { transform: translate(-6px, 3px); }
+    40% { transform: translate(6px, -3px); }
+    60% { transform: translate(-4px, -4px); }
+    80% { transform: translate(4px, 4px); }
+    100% { transform: translate(0,0); }
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-15px) rotate(-2deg); }
+    75% { transform: translateX(15px) rotate(2deg); }
+  }
+
+  header {
+    text-align: center;
+    padding: 50px 20px 20px;
+    position: relative;
+    z-index: 5;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 6vw, 4rem);
+    margin: 0;
+    letter-spacing: 3px;
+    text-shadow: 0 0 15px rgba(255, 0, 80, 0.8), 0 0 40px rgba(255, 0, 80, 0.5);
+    animation: pulse 1.4s infinite alternate;
+    color: #ff2e63;
+  }
+
+  @keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+  }
+
+  .subtitle {
+    margin-top: 10px;
+    font-size: 1.1rem;
+    opacity: 0.8;
+    font-style: italic;
+  }
+
+  .counter {
+    margin-top: 15px;
+    font-size: 1rem;
+    background: rgba(255,255,255,0.08);
+    display: inline-block;
+    padding: 8px 18px;
+    border-radius: 30px;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 28px;
+    padding: 30px 5vw 100px;
+    position: relative;
+    z-index: 5;
+  }
+
+  .danger-btn {
+    position: relative;
+    border: none;
+    cursor: pointer;
+    padding: 22px 30px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+    border-radius: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, #ff2e63, #ff8a00);
+    box-shadow: 0 8px 20px rgba(255, 46, 99, 0.45), inset 0 0 0 2px rgba(255,255,255,0.15);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    animation: wiggle 2.2s ease-in-out infinite;
+    min-width: 180px;
+  }
+
+  .danger-btn:nth-child(2n) {
+    background: linear-gradient(135deg, #7b2ff7, #f107a3);
+    animation-duration: 1.8s;
+  }
+  .danger-btn:nth-child(3n) {
+    background: linear-gradient(135deg, #00c9ff, #92fe9d);
+    color: #0f0c29;
+    animation-duration: 2.6s;
+  }
+  .danger-btn:nth-child(4n) {
+    background: linear-gradient(135deg, #f9d423, #ff4e50);
+    animation-duration: 2s;
+  }
+  .danger-btn:nth-child(5n) {
+    background: linear-gradient(135deg, #43cea2, #185a9d);
+    animation-duration: 3s;
+  }
+
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-2deg); }
+    50% { transform: rotate(2deg); }
+  }
+
+  .danger-btn:hover {
+    transform: scale(1.12) rotate(0deg) !important;
+    box-shadow: 0 12px 30px rgba(255, 46, 99, 0.7);
+  }
+
+  .danger-btn:active {
+    transform: scale(0.92) !important;
+  }
+
+  .danger-btn::before {
+    content: "⚠ ";
+  }
+
+  footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 0.85rem;
+    opacity: 0.6;
+    position: relative;
+    z-index: 5;
+  }
+
+  /* Fullscreen overlay message */
+  #overlay-message {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: clamp(1.8rem, 6vw, 4rem);
+    font-weight: 900;
+    color: #fff;
+    background: rgba(0,0,0,0.55);
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0;
+    padding: 20px;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.8);
+  }
+
+  #overlay-message.show {
+    animation: overlayPop 1.6s ease forwards;
+  }
+
+  @keyframes overlayPop {
+    0% { opacity: 0; transform: scale(0.5) rotate(-8deg); }
+    15% { opacity: 1; transform: scale(1.1) rotate(2deg); }
+    30% { transform: scale(1) rotate(0deg); }
+    80% { opacity: 1; }
+    100% { opacity: 0; transform: scale(1.3); }
+  }
+
+  /* Confetti */
+  .confetti-piece {
+    position: fixed;
+    top: -20px;
+    z-index: 9998;
+    pointer-events: none;
+    will-change: transform;
+  }
+
+  @keyframes confettiFall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0.9; }
+  }
+
+  /* Screen flash */
+  .flash {
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    z-index: 9997;
+    pointer-events: none;
+    opacity: 0;
+  }
+  .flash.go {
+    animation: flashAnim 0.4s ease;
+  }
+  @keyframes flashAnim {
+    0% { opacity: 0; }
+    20% { opacity: 0.9; }
+    100% { opacity: 0; }
+  }
+
+  /* Fake cursor trail chaos */
+  .emoji-burst {
+    position: fixed;
+    font-size: 2rem;
+    z-index: 9996;
+    pointer-events: none;
+    animation: burstFly 1.2s ease-out forwards;
+  }
+
+  @keyframes burstFly {
+    0% { transform: translate(0,0) scale(0.5) rotate(0deg); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(1.6) rotate(360deg); opacity: 0; }
+  }
+
+  /* Cracked screen effect */
+  #crack-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9995;
+    pointer-events: none;
+    opacity: 0;
+    background: repeating-linear-gradient(45deg, transparent 0 10px, rgba(255,255,255,0.15) 10px 11px),
+                repeating-linear-gradient(-45deg, transparent 0 14px, rgba(255,255,255,0.12) 14px 15px);
+  }
+  #crack-overlay.show {
+    animation: crackFade 1.5s ease forwards;
+  }
+  @keyframes crackFade {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* Fake virus popup */
+  .fake-popup {
+    position: fixed;
+    z-index: 10000;
+    background: #1e1e1e;
+    border: 2px solid #ff2e63;
+    border-radius: 10px;
+    padding: 18px 22px;
+    width: min(320px, 80vw);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    animation: popupDrop 0.5s cubic-bezier(.17,.67,.35,1.5) forwards;
+  }
+  @keyframes popupDrop {
+    0% { transform: translateY(-100px) scale(0.7); opacity: 0; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+  }
+  .fake-popup h3 {
+    margin: 0 0 8px;
+    color: #ff2e63;
+    font-size: 1rem;
+  }
+  .fake-popup p {
+    margin: 0 0 12px;
+    font-size: 0.85rem;
+    opacity: 0.85;
+  }
+  .fake-popup button {
+    background: #ff2e63;
+    border: none;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  /* Cursor grow */
+  body.giant-cursor, body.giant-cursor * {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><text y="50" font-size="50">🖱️</text></svg>') 16 16, auto !important;
+  }
+
+  /* Text scramble ticker */
+  #ticker {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #000;
+    color: #0f0;
+    font-family: monospace;
+    padding: 6px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    z-index: 50;
+    border-top: 2px solid #0f0;
+  }
+  #ticker span {
+    display: inline-block;
+    padding-left: 100%;
+    animation: tickerScroll 18s linear infinite;
+  }
+  @keyframes tickerScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+</style>
+</head>
+<body>
+
+  <div class="flash" id="flash"></div>
+  <div id="crack-overlay"></div>
+  <div id="overlay-message"></div>
+
+  <header>
+    <h1>🚫 DO NOT CLICK 🚫</h1>
+    <p class="subtitle">Seriously. Don't. We dare you.</p>
+    <div class="counter">Regret Counter: <span id="count">0</span></div>
+  </header>
+
+  <main class="grid" id="button-grid"></main>
+
+  <div id="ticker"><span>WARNING: clicking buttons on this page voids all known warranties, common sense, and possibly the laws of physics. Proceed at your own risk. &nbsp;&nbsp;&nbsp; DO NOT CLICK. &nbsp;&nbsp;&nbsp; WE MEAN IT. &nbsp;&nbsp;&nbsp; okay fine click it. &nbsp;&nbsp;&nbsp;</span></div>
+
+  <footer>Made with chaos, CSS, and zero regrets.</footer>
+
+<script>
+(function () {
+  // Multilingual label bank — chaos knows no borders
+  const labels = [
+    "DO NOT CLICK", "SERIOUSLY, DON'T", "ABSOLUTELY NOT", "NOPE.", "DANGER ZONE",
+    "TOUCH AND YOU'LL SEE", "FORBIDDEN BUTTON", "REGRET AWAITS", "PANDORA'S BUTTON",
+    "THE BIG RED FLAG", "WHY ARE YOU HOVERING", "STOP RIGHT THERE", "NO TOUCHY",
+    "CHAOS INCOMING", "YOU HAVE BEEN WARNED", "LAST CHANCE TO LEAVE", "IRREVERSIBLE",
+    "THIS IS A TRAP", "SELF DESTRUCT-ISH", "DO. NOT.", "CURIOSITY KILLED THE CAT",
+    "PLOT TWIST BUTTON", "MAXIMUM REGRET",
+    "NO TOQUES ESTO", "NE CLIQUEZ PAS", "NICHT KLICKEN", "NON CLICCARE",
+    "絶対に押すな", "누르지 마세요", "不要点击", "मत दबाओ", "НЕ НАЖИМАТЬ",
+    "ΜΗΝ ΠΑΤΗΣΕΙΣ", "לא ללחוץ", "لا تضغط", "AMA I-CLICK", "EI PAINELLA",
+    "IKKE KLIKK", "NIE KLIKAJ", "NEKLIKEJ", "ÁLLJ MEG", "DUR OLMA"
+  ];
+
+  const overlayMessages = [
+    "🌀 REALITY.EXE HAS STOPPED WORKING",
+    "🎉 CONGRATULATIONS, YOU DID THE THING",
+    "🐸 A WILD FROG APPEARED",
+    "🚨 ALARM! JUST KIDDING.",
+    "🍕 PIZZA HAS BEEN ORDERED (not really)",
+    "👽 ALIENS HAVE BEEN NOTIFIED",
+    "💥 BOOM. NOTHING HAPPENED.",
+    "🦄 UNICORN MAGIC ACTIVATED",
+    "🫠 YOUR SANITY.EXE IS MELTING",
+    "🐢 TURTLE MODE ENGAGED",
+    "🎪 WELCOME TO THE CIRCUS",
+    "🔮 THE BUTTON HAS SPOKEN",
+    "🧠 YOU HAVE UNLOCKED NOTHING",
+    "📉 STONKS ARE NOW DOWN",
+    "📈 STONKS ARE NOW UP",
+    "🛸 BEAM ME UP, SCOTTY",
+    "🍌 BANANA.EXE LAUNCHED",
+    "🫥 YOU HAVE ENTERED THE VOID",
+    "🎲 RNG GODS HAVE JUDGED YOU",
+    "🐙 THE KRAKEN AWAKENS",
+    "🥴 恭喜你，什么都没发生",
+    "🎏 おめでとうございます、無意味です",
+    "🫡 ПОЗДРАВЛЯЮ, ТЫ НИЧЕГО НЕ ВЫИГРАЛ",
+    "🥳 축하합니다! 아무 의미 없어요",
+    "🎩 FÉLICITATIONS, RIEN NE S'EST PASSÉ",
+    "🎈 HERZLICHEN GLÜCKWUNSCH, NICHTS PASSIERT",
+    "🎇 ¡FELICIDADES! NO PASÓ NADA",
+    "🪅 CONGRATULAZIONI, NON È SUCCESSO NULLA",
+    "🕺 मुबारक हो, कुछ नहीं हुआ"
+  ];
+
+  const emojiSets = ["🎉","🎊","💥","🌀","🐸","👽","🦄","🍕","🔥","✨","🍌","🐙","🎲","💫","🫠","🚀","🛸","🌈","🐢","🧠","🌪️","☄️","🧨","🪩","🎃","👻","🫨","🥽"];
+
+  // Random gibberish/multilingual chaos words for text scrambling
+  const chaosWords = [
+    "ERROR","エラー","错误","ОШИБКА","خطأ","त्रुटि","ERREUR","FEHLER","ERRORE",
+    "SYSTEM","시스템","系统","СИСТЕМА","نظام","तंत्र","SYSTÈME","SYSTEM","SISTEMA",
+    "CHAOS","カオス","混乱","ХАОС","فوضى","अव्यवस्था","CHAOS","CHAOS","CAOS",
+    "WARNING","警告","警告","ПРЕДУПРЕЖДЕНИЕ","تحذير","चेतावनी","AVERTISSEMENT","WARNUNG","AVVISO",
+    "OVERLOAD","過負荷","过载","ПЕРЕГРУЗКА","حمل زائد","अधिभार","SURCHARGE","ÜBERLASTUNG","SOVRACCARICO"
+  ];
+
+  const languageBank = ["en","es","fr","de","it","ja","ko","zh","ru","ar","hi","el","he","tr","pl","cs","hu","fi","no"];
+
+  const grid = document.getElementById("button-grid");
+  const overlay = document.getElementById("overlay-message");
+  const flash = document.getElementById("flash");
+  const crack = document.getElementById("crack-overlay");
+  const countEl = document.getElementById("count");
+  let clickCount = 0;
+
+  // Build buttons
+  const buttonCount = 14;
+  for (let i = 0; i < buttonCount; i++) {
+    const btn = document.createElement("button");
+    btn.className = "danger-btn";
+    btn.textContent = labels[Math.floor(Math.random() * labels.length)];
+    btn.style.animationDelay = (Math.random() * 2) + "s";
+    btn.addEventListener("click", handleClick);
+    grid.appendChild(btn);
+  }
+
+  function showOverlay(text) {
+    overlay.textContent = text;
+    overlay.classList.remove("show");
+    void overlay.offsetWidth; // restart animation
+    overlay.classList.add("show");
+  }
+
+  function doFlash() {
+    flash.classList.remove("go");
+    void flash.offsetWidth;
+    flash.classList.add("go");
+  }
+
+  function doCrack() {
+    crack.classList.remove("show");
+    void crack.offsetWidth;
+    crack.classList.add("show");
+  }
+
+  function confettiBurst(count = 120) {
+    const colors = ["#ff2e63","#08d9d6","#f9d423","#43cea2","#7b2ff7","#ff8a00","#00c9ff","#f107a3"];
+    for (let i = 0; i < count; i++) {
+      const piece = document.createElement("div");
+      piece.className = "confetti-piece";
+      const size = 6 + Math.random() * 8;
+      piece.style.width = size + "px";
+      piece.style.height = (size * (Math.random() > 0.5 ? 1 : 2.2)) + "px";
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.left = Math.random() * 100 + "vw";
+      piece.style.borderRadius = Math.random() > 0.5 ? "50%" : "2px";
+      const duration = 2 + Math.random() * 2.5;
+      const delay = Math.random() * 0.4;
+      piece.style.animation = `confettiFall ${duration}s ease-in ${delay}s forwards`;
+      document.body.appendChild(piece);
+      setTimeout(() => piece.remove(), (duration + delay) * 1000 + 200);
+    }
+  }
+
+  function emojiExplosion() {
+    const originX = window.innerWidth / 2;
+    const originY = window.innerHeight / 2;
+    const count = 24;
+    for (let i = 0; i < count; i++) {
+      const e = document.createElement("div");
+      e.className = "emoji-burst";
+      e.textContent = emojiSets[Math.floor(Math.random() * emojiSets.length)];
+      const angle = (Math.PI * 2 * i) / count;
+      const distance = 150 + Math.random() * 250;
+      const dx = Math.cos(angle) * distance;
+      const dy = Math.sin(angle) * distance;
+      e.style.setProperty("--dx", dx + "px");
+      e.style.setProperty("--dy", dy + "px");
+      e.style.left = originX + "px";
+      e.style.top = originY + "px";
+      document.body.appendChild(e);
+      setTimeout(() => e.remove(), 1300);
+    }
+  }
+
+  function spawnFakePopup() {
+    const popup = document.createElement("div");
+    popup.className = "fake-popup";
+    popup.style.top = (10 + Math.random() * 60) + "vh";
+    popup.style.left = (10 + Math.random() * 60) + "vw";
+    popup.innerHTML = `
+      <h3>⚠ SYSTEM NOTICE</h3>
+      <p>${["Your vibes have been recalculated.","404: Regret not found (yet).","This popup means nothing.","Achievement unlocked: Curiosity.","Nothing is actually wrong."][Math.floor(Math.random()*5)]}</p>
+      <button type="button">OK, WHATEVER</button>
+    `;
+    document.body.appendChild(popup);
+    popup.querySelector("button").addEventListener("click", () => popup.remove());
+    setTimeout(() => popup.remove(), 4500);
+  }
+
+  function shuffleAllButtonText() {
+    document.querySelectorAll(".danger-btn").forEach(b => {
+      b.textContent = labels[Math.floor(Math.random() * labels.length)];
+    });
+  }
+
+  function shuffleButtonPositions() {
+    const btns = Array.from(document.querySelectorAll(".danger-btn"));
+    btns.forEach(b => {
+      b.style.transition = "transform 0.5s ease";
+      b.style.transform = `translate(${(Math.random()-0.5)*60}px, ${(Math.random()-0.5)*60}px) rotate(${(Math.random()-0.5)*30}deg)`;
+      setTimeout(() => { b.style.transform = ""; }, 600);
+    });
+  }
+
+  const bodyClasses = ["rotated","tilted","tilted-neg","shrunk","grown","inverted","grayscale","blurred","rainbow-filter","giant-cursor","rtl-flip","upside-down-text","strobe","comic-sans-mode","glitch-mode"];
+
+  function applyRandomBodyEffect() {
+    bodyClasses.forEach(c => document.body.classList.remove(c));
+    const chosen = bodyClasses[Math.floor(Math.random() * bodyClasses.length)];
+    document.body.classList.add(chosen);
+    const transient = !["strobe"].includes(chosen);
+    if (transient) {
+      setTimeout(() => document.body.classList.remove(chosen), chosen === "giant-cursor" ? 4000 : 2200);
+    } else {
+      setTimeout(() => document.body.classList.remove(chosen), 1500);
+    }
+  }
+
+  function playRandomSoundFeedback() {
+    const h1 = document.querySelector("h1");
+    h1.style.animation = "none";
+    void h1.offsetWidth;
+    h1.style.animation = "pulse 1.4s infinite alternate";
+  }
+
+  // --- NEW CHAOS: language hijack ---
+  function hijackLanguage() {
+    const lang = languageBank[Math.floor(Math.random() * languageBank.length)];
+    document.documentElement.setAttribute("lang", lang);
+    document.body.setAttribute("dir", Math.random() > 0.8 ? "rtl" : "ltr");
+    setTimeout(() => document.body.setAttribute("dir", "ltr"), 2500);
+  }
+
+  // --- NEW CHAOS: gibberish translate overlay ---
+  function fakeTranslateOverlay() {
+    const div = document.createElement("div");
+    div.style.position = "fixed";
+    div.style.top = "0";
+    div.style.left = "0";
+    div.style.width = "100%";
+    div.style.zIndex = "10001";
+    div.style.background = "linear-gradient(90deg,#7b2ff7,#f107a3)";
+    div.style.color = "#fff";
+    div.style.fontFamily = "monospace";
+    div.style.fontSize = "0.85rem";
+    div.style.padding = "6px 10px";
+    div.style.boxShadow = "0 4px 20px rgba(0,0,0,0.5)";
+    const word = chaosWords[Math.floor(Math.random() * chaosWords.length)];
+    div.textContent = `🌐 AUTO-TRANSLATE: "${word}" detected — translating entire page chaos-dialect...`;
+    document.body.appendChild(div);
+    setTimeout(() => div.remove(), 2600);
+  }
+
+  // --- NEW CHAOS: matrix-style falling glyph rain ---
+  function matrixRain(durationMs = 2400) {
+    const canvas = document.createElement("canvas");
+    canvas.style.position = "fixed";
+    canvas.style.inset = "0";
+    canvas.style.zIndex = "9994";
+    canvas.style.pointerEvents = "none";
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    document.body.appendChild(canvas);
+    const ctx = canvas.getContext("2d");
+    const glyphs = "アイウエオカキクケコサシスセソ日本語中文한글АБВГД0123456789#@%&*".split("");
+    const cols = Math.floor(canvas.width / 18);
+    const drops = new Array(cols).fill(0);
+    let raf;
+    const start = performance.now();
+    function draw() {
+      ctx.fillStyle = "rgba(15,12,41,0.15)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#0f0";
+      ctx.font = "16px monospace";
+      for (let i = 0; i < cols; i++) {
+        const text = glyphs[Math.floor(Math.random() * glyphs.length)];
+        ctx.fillStyle = Math.random() > 0.95 ? "#ff2e63" : "#39ff14";
+        ctx.fillText(text, i * 18, drops[i] * 18);
+        drops[i] = (drops[i] * 18 > canvas.height && Math.random() > 0.975) ? 0 : drops[i] + 1;
+      }
+      if (performance.now() - start < durationMs) {
+        raf = requestAnimationFrame(draw);
+      } else {
+        canvas.remove();
+      }
+    }
+    raf = requestAnimationFrame(draw);
+  }
+
+  // --- NEW CHAOS: shatter shards fly apart ---
+  function shatterScreen() {
+    const shardCount = 18;
+    for (let i = 0; i < shardCount; i++) {
+      const shard = document.createElement("div");
+      shard.style.position = "fixed";
+      shard.style.zIndex = "9993";
+      shard.style.pointerEvents = "none";
+      shard.style.width = "20vw";
+      shard.style.height = "20vh";
+      shard.style.left = (Math.random() * 90) + "vw";
+      shard.style.top = (Math.random() * 90) + "vh";
+      shard.style.background = "rgba(255,255,255,0.06)";
+      shard.style.border = "1px solid rgba(255,255,255,0.25)";
+      shard.style.transform = "scale(1)";
+      shard.style.transition = "transform 0.9s cubic-bezier(.36,.07,.19,.97), opacity 0.9s ease";
+      document.body.appendChild(shard);
+      requestAnimationFrame(() => {
+        const dx = (Math.random() - 0.5) * 800;
+        const dy = (Math.random() - 0.5) * 800;
+        const rot = (Math.random() - 0.5) * 720;
+        shard.style.transform = `translate(${dx}px, ${dy}px) rotate(${rot}deg) scale(0)`;
+        shard.style.opacity = "0";
+      });
+      setTimeout(() => shard.remove(), 1000);
+    }
+  }
+
+  // --- NEW CHAOS: random font hijack ---
+  const fontBank = [
+    "'Comic Sans MS', cursive", "'Papyrus', fantasy", "monospace", "'Brush Script MT', cursive",
+    "'Courier New', monospace", "serif", "'Impact', sans-serif", "cursive"
+  ];
+  function fontHijack() {
+    const font = fontBank[Math.floor(Math.random() * fontBank.length)];
+    document.body.style.fontFamily = font;
+    setTimeout(() => { document.body.style.fontFamily = ""; }, 3000);
+  }
+
+  // --- NEW CHAOS: siren strobe (rapid color flash) ---
+  function sirenStrobe() {
+    const colors = ["#ff0000","#ffffff","#0000ff","#ff0000","#ffff00","#ff00ff"];
+    let i = 0;
+    const overlayDiv = document.createElement("div");
+    overlayDiv.style.position = "fixed";
+    overlayDiv.style.inset = "0";
+    overlayDiv.style.zIndex = "10002";
+    overlayDiv.style.pointerEvents = "none";
+    overlayDiv.style.mixBlendMode = "screen";
+    document.body.appendChild(overlayDiv);
+    const interval = setInterval(() => {
+      overlayDiv.style.background = colors[i % colors.length];
+      overlayDiv.style.opacity = "0.35";
+      i++;
+      if (i > 12) {
+        clearInterval(interval);
+        overlayDiv.remove();
+      }
+    }, 80);
+  }
+
+  // --- NEW CHAOS: cursor confetti trail burst at random screen point ---
+  function randomPointEmojiBurst() {
+    const x = Math.random() * window.innerWidth;
+    const y = Math.random() * window.innerHeight;
+    const count = 16;
+    for (let i = 0; i < count; i++) {
+      const e = document.createElement("div");
+      e.className = "emoji-burst";
+      e.textContent = emojiSets[Math.floor(Math.random() * emojiSets.length)];
+      const angle = (Math.PI * 2 * i) / count;
+      const distance = 100 + Math.random() * 200;
+      e.style.setProperty("--dx", Math.cos(angle) * distance + "px");
+      e.style.setProperty("--dy", Math.sin(angle) * distance + "px");
+      e.style.left = x + "px";
+      e.style.top = y + "px";
+      document.body.appendChild(e);
+      setTimeout(() => e.remove(), 1300);
+    }
+  }
+
+  // --- NEW CHAOS: page title glitch cycling through languages ---
+  const glitchTitles = ["絶対に押すな", "لا تضغط", "НЕ НАЖИМАЙ", "누르지 마세요", "不要点击", "NO CLIQUES", "😱😱😱", "ERROR_ERROR_ERROR"];
+  function titleGlitch() {
+    let idx = 0;
+    const original = "DO NOT CLICK";
+    const interval = setInterval(() => {
+      document.title = glitchTitles[idx % glitchTitles.length];
+      idx++;
+      if (idx > 8) {
+        clearInterval(interval);
+        document.title = original;
+      }
+    }, 200);
+  }
+
+  // --- NEW CHAOS: random scattered chaos-word stickers across screen ---
+  function chaosWordStickers() {
+    const count = 10;
+    for (let i = 0; i < count; i++) {
+      const sticker = document.createElement("div");
+      sticker.textContent = chaosWords[Math.floor(Math.random() * chaosWords.length)];
+      sticker.style.position = "fixed";
+      sticker.style.left = Math.random() * 90 + "vw";
+      sticker.style.top = Math.random() * 90 + "vh";
+      sticker.style.zIndex = "9992";
+      sticker.style.color = ["#ff2e63","#00c9ff","#f9d423","#43cea2"][Math.floor(Math.random()*4)];
+      sticker.style.fontWeight = "900";
+      sticker.style.fontSize = (1 + Math.random() * 2) + "rem";
+      sticker.style.pointerEvents = "none";
+      sticker.style.textShadow = "0 0 10px rgba(0,0,0,0.8)";
+      sticker.style.transform = `rotate(${(Math.random()-0.5)*60}deg) scale(0)`;
+      sticker.style.transition = "transform 0.4s cubic-bezier(.17,.67,.35,1.5), opacity 1s ease";
+      document.body.appendChild(sticker);
+      requestAnimationFrame(() => { sticker.style.transform = `rotate(${(Math.random()-0.5)*60}deg) scale(1)`; });
+      setTimeout(() => {
+        sticker.style.opacity = "0";
+        setTimeout(() => sticker.remove(), 1000);
+      }, 1800);
+    }
+  }
+
+  const actions = [
+    () => { showOverlay(overlayMessages[Math.floor(Math.random()*overlayMessages.length)]); },
+    () => { confettiBurst(150); showOverlay("🎉 CONFETTI CHAOS ACTIVATED 🎉"); },
+    () => { applyRandomBodyEffect(); },
+    () => { doFlash(); showOverlay("⚡ FLASHBANGED ⚡"); },
+    () => { emojiExplosion(); },
+    () => { spawnFakePopup(); },
+    () => { shuffleAllButtonText(); showOverlay("🔀 ALL LABELS SHUFFLED 🔀"); },
+    () => { shuffleButtonPositions(); },
+    () => { doCrack(); showOverlay("💢 SCREEN INTEGRITY: QUESTIONABLE 💢"); },
+    () => { document.title = "😱 STOP CLICKING 😱"; setTimeout(() => document.title = "DO NOT CLICK", 3000); showOverlay("📑 TAB TITLE HIJACKED 📑"); },
+    () => { confettiBurst(80); applyRandomBodyEffect(); showOverlay("🌀 DOUBLE CHAOS COMBO 🌀"); },
+    () => { playRandomSoundFeedback(); emojiExplosion(); showOverlay("🎆 SPARKLES EVERYWHERE 🎆"); },
+    () => { hijackLanguage(); fakeTranslateOverlay(); showOverlay("🌐 LANGUAGE HIJACKED 🌐"); },
+    () => { matrixRain(); showOverlay("💻 ENTERING THE MATRIX 💻"); },
+    () => { shatterScreen(); showOverlay("💔 SCREEN SHATTERED (probably fine) 💔"); },
+    () => { fontHijack(); showOverlay("🔤 FONT CRIMES COMMITTED 🔤"); },
+    () => { sirenStrobe(); showOverlay("🚨 SIREN MODE 🚨"); },
+    () => { randomPointEmojiBurst(); randomPointEmojiBurst(); },
+    () => { titleGlitch(); },
+    () => { chaosWordStickers(); },
+    () => { confettiBurst(200); matrixRain(1800); sirenStrobe(); showOverlay("☢️ TOTAL CHAOS OVERLOAD ☢️"); },
+  ];
+
+  function handleClick(e) {
+    clickCount++;
+    countEl.textContent = clickCount;
+
+    // No limits: more clicks = more simultaneous actions, always escalating
+    const baseActions = 1 + Math.floor(clickCount / 3);
+    const numActions = Math.min(baseActions + (Math.random() > 0.5 ? 1 : 0), actions.length);
+    const chosenActions = new Set();
+    while (chosenActions.size < numActions) {
+      chosenActions.add(actions[Math.floor(Math.random() * actions.length)]);
+    }
+    chosenActions.forEach(fn => fn());
+
+    // buttons multiply more aggressively as chaos escalates, no cap
+    const spawnChance = Math.min(0.9, 0.4 + clickCount * 0.03);
+    if (Math.random() < spawnChance) {
+      const spawnCount = 1 + Math.floor(Math.random() * 3);
+      for (let s = 0; s < spawnCount; s++) {
+        const btn = document.createElement("button");
+        btn.className = "danger-btn";
+        btn.textContent = labels[Math.floor(Math.random() * labels.length)];
+        btn.style.animationDelay = (Math.random() * 2) + "s";
+        btn.addEventListener("click", handleClick);
+        grid.appendChild(btn);
+      }
+    }
+  }
+})();
+</script>
+</body>
+</html>
